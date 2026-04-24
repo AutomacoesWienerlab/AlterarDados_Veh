@@ -1,6 +1,9 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
-from tkinterdnd2 import DND_FILES, TkinterDnD
+from tkinter import ttk
+from tkinterdnd2 import DND_FILES
+from IO.formateTxT import FormateTxt
+from IO.abrirArquivo import AbrirArquvos
+
 import os
 
 
@@ -76,11 +79,11 @@ class App(ttk.Frame):
         self._campo(frame, "Índice do campo", self.campo_var)
         self._campo(frame, "Novo valor", self.num_var)
         self._campo(frame, "ID da linha", self.id_var)
-
+        formater = FormateTxt()
         ttk.Button(
             frame,
             text="Processar",
-            command=self.executar_processamento
+            command=formater.executar_processamento(self.caminho_arquivo)
         ).pack(pady=15)
 
         self.process_status = ttk.Label(frame, text="")
@@ -94,56 +97,25 @@ class App(ttk.Frame):
         self.caminho_arquivo = event.data.strip("{}")
         self.upload_status.config(text=f"Arquivo: {self.caminho_arquivo}")
 
-    def executar_processamento(self):
-        if not self.caminho_arquivo:
-            self.process_status.config(text="Nenhum arquivo carregado")
-            return
+   
+    # def processar_arquivos(self, caminho, separador, campoAlterar, numAtl, id_row):
+    #     novas_linhas = []
 
-        try:
-            caminho_saida = self.processar_arquivos(
-                self.caminho_arquivo,
-                self.separador_var.get(),
-                int(self.campo_var.get()),
-                self.num_var.get(),
-                self.id_var.get()
-            )
+    #     with open(caminho, "r") as f:
+    #         for rows in f:
+    #             dados = rows.lstrip("|").strip().split(separador)
 
-            self.process_status.config(text="Processado com sucesso")
+    #             if dados[0] == id_row:
+    #                 if campoAlterar < len(dados):
+    #                     dados[campoAlterar] = str(numAtl)
+    #                 nova_linha = "|" + separador.join(dados)
+    #                 novas_linhas.append(nova_linha)
+    #             else:
+    #                 novas_linhas.append(rows.strip())
 
-            messagebox.showinfo(
-                "Concluído",
-                f"Arquivo gerado com sucesso.\n\nLocal:\n{caminho_saida}"
-            )
+    #     caminho_saida = os.path.abspath("ArquivoFormatado.txt")
 
-        except Exception as e:
-            self.process_status.config(text=f"Erro: {str(e)}")
+    #     with open(caminho_saida, "w") as f:
+    #         f.write("\n".join(novas_linhas))
 
-    def processar_arquivos(self, caminho, separador, campoAlterar, numAtl, id_row):
-        novas_linhas = []
-
-        with open(caminho, "r") as f:
-            for rows in f:
-                dados = rows.lstrip("|").strip().split(separador)
-
-                if dados[0] == id_row:
-                    if campoAlterar < len(dados):
-                        dados[campoAlterar] = str(numAtl)
-                    nova_linha = "|" + separador.join(dados)
-                    novas_linhas.append(nova_linha)
-                else:
-                    novas_linhas.append(rows.strip())
-
-        caminho_saida = os.path.abspath("ArquivoFormatado.txt")
-
-        with open(caminho_saida, "w") as f:
-            f.write("\n".join(novas_linhas))
-
-        return caminho_saida
-
-
-root = TkinterDnD.Tk()
-root.title("Processador TXT")
-root.geometry("500x400")
-
-app = App(root)
-app.mainloop()
+    #     return caminho_saida
