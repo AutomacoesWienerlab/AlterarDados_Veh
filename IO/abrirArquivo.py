@@ -1,23 +1,23 @@
 from os import path
-class AbrirArquivos:
-    def processar_arquivos(self, caminho, separador, campoAlterar, numAtl, id_row):
-            novas_linhas = []
 
-            with open(caminho, "r") as f:
-                for rows in f:
-                    dados = rows.lstrip("|").strip().split(separador)
+def processar_arquivos(caminho, separador, campoAlterar, numAtl, id_row):
+        novas_linhas = []
 
-                    if dados[0] == id_row:
-                        if campoAlterar < len(dados):
-                            dados[campoAlterar] = str(numAtl)
-                        nova_linha = "|" + separador.join(dados)
-                        novas_linhas.append(nova_linha)
-                    else:
-                        novas_linhas.append(rows.strip())
+        with open(caminho, "r") as f:
+            for rows in f:
+                dados = rows.lstrip("|").strip().split(separador)
 
-            caminho_saida = path.abspath("ArquivoFormatado.txt")
+                if dados[0] == id_row:
+                    if campoAlterar < len(dados):
+                        dados[campoAlterar] = str(numAtl)
+                    nova_linha = "|" + separador.join(dados)
+                    novas_linhas.append(nova_linha)
+                else:
+                    novas_linhas.append(rows.strip())
 
-            with open(caminho_saida, "w") as f:
-                f.write("\n".join(novas_linhas))
+        caminho_saida = path.abspath("ArquivoFormatado.txt")
 
-            return caminho_saida
+        with open(caminho_saida, "w") as f:
+            f.write("\n".join(novas_linhas))
+
+        return caminho_saida

@@ -6,3 +6,7 @@
 *.spec
 *.zip
 *.exe
+__pycache__
+*.pyc
+*.json
+README

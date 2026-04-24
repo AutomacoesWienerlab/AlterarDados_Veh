@@ -2,10 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 from tkinterdnd2 import DND_FILES
 from IO.formateTxT import FormateTxt
-from IO.abrirArquivo import AbrirArquvos
-
-import os
-
 
 class App(ttk.Frame):
     def __init__(self, master):
@@ -70,20 +66,20 @@ class App(ttk.Frame):
         frame = ttk.Frame(self.tab_process)
         frame.pack(pady=20)
 
-        self.separador_var = tk.StringVar(value="|")
-        self.campo_var = tk.StringVar(value="1")
-        self.num_var = tk.StringVar(value="999")
-        self.id_var = tk.StringVar(value="ABC123")
+        self.separador_var = tk.StringVar(value="")
+        self.campo_var = tk.StringVar(value="")
+        self.num_var = tk.StringVar(value="")
+        self.id_var = tk.StringVar(value="")
 
         self._campo(frame, "Separador", self.separador_var)
         self._campo(frame, "Índice do campo", self.campo_var)
         self._campo(frame, "Novo valor", self.num_var)
         self._campo(frame, "ID da linha", self.id_var)
-        formater = FormateTxt()
+        formater = FormateTxt(self)
         ttk.Button(
             frame,
             text="Processar",
-            command=formater.executar_processamento(self.caminho_arquivo)
+            command=formater.executar_processamento
         ).pack(pady=15)
 
         self.process_status = ttk.Label(frame, text="")

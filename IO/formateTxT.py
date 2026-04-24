@@ -1,23 +1,26 @@
 from tkinter import messagebox
-from abrirArquivo import AbrirArquivos
+from .abrirArquivo import processar_arquivos
 
 class FormateTxt:
+        def __init__(self, app):
+             self.app = app
+             
         def executar_processamento(self):
-            abrirarquivos = AbrirArquivos
-            if not self.caminho_arquivo:
-                self.process_status.config(text="Nenhum arquivo carregado")
+  
+            if not self.app.caminho_arquivo:
+                self.app.process_status.config(text="Nenhum arquivo carregado")
                 return
 
             try:
-                caminho_saida = abrirarquivos.processar_arquivos(
-                    self.caminho_arquivo,
-                    self.separador_var.get(),
-                    int(self.campo_var.get()),
-                    self.num_var.get(),
-                    self.id_var.get()
+                caminho_saida = processar_arquivos(
+                    self.app.caminho_arquivo,
+                    self.app.separador_var.get(),
+                    int(self.app.campo_var.get()),
+                    self.app.num_var.get(),
+                    self.app.id_var.get()
                 )
 
-                self.process_status.config(text="Processado com sucesso")
+                self.app.process_status.config(text="Processado com sucesso")
 
                 messagebox.showinfo(
                     "Concluído",
@@ -25,4 +28,4 @@ class FormateTxt:
                 )
 
             except Exception as e:
-                self.process_status.config(text=f"Erro: {str(e)}")
+                self.app.process_status.config(text=f"Erro: Algum campo não foi preenchido corretamente! \n{str(e)}")
