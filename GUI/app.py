@@ -17,12 +17,15 @@ class App(ttk.Frame):
 
         self.tab_upload = ttk.Frame(self.notebook)
         self.tab_process = ttk.Frame(self.notebook)
+        self.tab_delete = ttk.Frame(self.notebook)
 
         self.notebook.add(self.tab_upload, text="Upload")
         self.notebook.add(self.tab_process, text="Processamento")
+        self.notebook.add(self.tab_delete, text="Deletar")
 
         self._build_upload_tab()
         self._build_process_tab()
+        self._build_delete_tab()
 
     def _configurar_estilo(self):
         style = ttk.Style()
@@ -84,6 +87,29 @@ class App(ttk.Frame):
 
         self.process_status = ttk.Label(frame, text="")
         self.process_status.pack()
+    
+    def _build_delete_tab(self):
+        frame = ttk.Frame(self.tab_delete)
+        frame.pack(pady=20)
+
+        self.separador_var = tk.StringVar(value="|")
+        self.campo_var = tk.StringVar(value="2")
+        self.num_var = tk.StringVar(value="2")
+        self.id_var = tk.StringVar(value="D100")
+
+        self._campo(frame, "Separador", self.separador_var)
+        self._campo(frame, "Índice do campo", self.campo_var)
+        self._campo(frame, "Apagar apartir de qual indice?", self.num_var)
+        self._campo(frame, "ID da linha", self.id_var)
+        formater = FormateTxt(self)
+        ttk.Button(
+            frame,
+            text="Deletar",
+            command=formater.executar_delete
+        ).pack(pady=15)
+
+        self.process_status = ttk.Label(frame, text="")
+        self.process_status.pack()
 
     def _campo(self, parent, texto, variavel):
         ttk.Label(parent, text=texto).pack(anchor="w", padx=5)
@@ -92,26 +118,3 @@ class App(ttk.Frame):
     def drop(self, event):
         self.caminho_arquivo = event.data.strip("{}")
         self.upload_status.config(text=f"Arquivo: {self.caminho_arquivo}")
-
-   
-    # def processar_arquivos(self, caminho, separador, campoAlterar, numAtl, id_row):
-    #     novas_linhas = []
-
-    #     with open(caminho, "r") as f:
-    #         for rows in f:
-    #             dados = rows.lstrip("|").strip().split(separador)
-
-    #             if dados[0] == id_row:
-    #                 if campoAlterar < len(dados):
-    #                     dados[campoAlterar] = str(numAtl)
-    #                 nova_linha = "|" + separador.join(dados)
-    #                 novas_linhas.append(nova_linha)
-    #             else:
-    #                 novas_linhas.append(rows.strip())
-
-    #     caminho_saida = os.path.abspath("ArquivoFormatado.txt")
-
-    #     with open(caminho_saida, "w") as f:
-    #         f.write("\n".join(novas_linhas))
-
-    #     return caminho_saida
